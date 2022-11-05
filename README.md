@@ -9,7 +9,7 @@ Analyze TCGA datasets to export differentially expressed genes from specific can
 ## Requirements
 This script requires the following packages:
 - tidyverse
-- TCGAbiolinks)
+- TCGAbiolinks
 - SummarizedExperiment
 - DESeq2
 - RColorBrewer
