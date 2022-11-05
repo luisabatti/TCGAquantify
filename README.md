@@ -1,5 +1,5 @@
 # TCGAquantify
-Analyze TCGA datasets to export differentially expressed genes from specific cancer types. At the end, plot a graph showing which cancer types overexpress each gene of interest the most compared to normal tissue.
+An R script that analyzes TCGA datasets and exports differentially expressed genes from specific cancer types. At the end, it plots separate graphs showing which cancer types overexpress each gene of interest the most compared to normal tissue.
 
 ## Usage
 1) Change CancerProject variable to include or remove cancer types to be analyzed;
