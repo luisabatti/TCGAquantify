@@ -1,4 +1,4 @@
-#Script by Luis E. Abatti. This script will analyze TCGA datasets to export differential expression analysis (DEA) from specific genes. At the end, plot a graph showing which cancer types overexpress each gene the most compared to normal tissue.
+#Script by Luis E. Abatti. This script will analyze TCGA RNA-seq datasets to export differential expression analysis (DEA) from specific genes. At the end, plot a graph showing which cancer types overexpress each gene the most compared to normal tissue.
 ###### Required libraries
 library(tidyverse)
 library(TCGAbiolinks)
@@ -32,7 +32,7 @@ genes_of_interest <- c("SOX2", "PUM1", "ACTB", "SOX9")
 
 gtf_hg38_annotation <- read_csv(paste0(MainDirectory,"gencode.v36.genes.csv"))
 #Import hg38 gene annotation, currently TCGA uses gencode V36, can be downloaded from here: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_42/gencode.v42.chr_patch_hapl_scaff.annotation.gtf.gz
-  
+
 gtf_hg38_gc <- read_csv(paste0(MainDirectory,"gencode.v36.gc_content.csv"))
 #Imports table with GC content for every gene, exported from ENSEMBL biomart
 
@@ -216,8 +216,8 @@ TCGA_deseq2 <- function(importData) {
     filter(gene_name %in% genes_of_interest)
   #Extracts genes of interest from DESeq2 results
   
-  ########### Extract log2-normalized reads from DESeq2 -> use this for any analysis involving ANOVA
-  message(importData,": Extracting log2-normalized reads")
+  ########### Extract log2-normalized counts from DESeq2 -> use this for any analysis involving ANOVA
+  message(importData,": Extracting log2-normalized counts")
   
   result_deseq2_log2 <- normTransform(dds)
   #Calculates log2(counts + 1)
@@ -228,29 +228,12 @@ TCGA_deseq2 <- function(importData) {
     mutate(project_id = importData) %>%
     dplyr::select(project_id, gene_id, gene_name, everything())
   
-  message(importData,": Saving log2-normalized reads RDS file")
+  message(importData,": Saving log2-normalized counts RDS file")
   
   saveRDS(normalized_res, paste0(RNAseqDirectory,importData,"/",importData,"_TCGAtools_DESeq2_log2_normalized_counts.rds"))
   
   
-  ########## Extract log2 CPM -> use this only if asked to show CPM, not a great normal distribution compared to log2(Counts + 1) which is also normalized to library size
-  message(importData,": Extracting log2-normalized CPM/FPM")
-  
-  result_deseq2_log2CPM <- log2(fpm(dds, robust = TRUE) + 1)
-  #Calculates log2CPM(x + 1)
-  
-  normalized_log2CPM <- as.data.frame(result_deseq2_log2CPM) %>%
-    rownames_to_column(var = "gene_id") %>%
-    inner_join(., gtf_hg38, by = "gene_id") %>%
-    mutate(project_id = importData) %>%
-    dplyr::select(project_id, gene_id, gene_name, everything())
-  
-  message(importData,": Saving log2-normalized CPM RDS file")
-  
-  saveRDS(normalized_log2CPM, paste0(RNAseqDirectory,importData,"/",importData,"_TCGAtools_DESeq2_log2_normalized_CPM.rds"))
-  
-  
-  ########## Extract vst-transformed reads from DESeq2 -> use this for plotting or grouping
+  ########## Extract vst-transformed counts from DESeq2 -> use this for plotting or grouping
   message(importData,": Calculating vst")
   
   vsd <- vst(dds, blind=FALSE)
@@ -267,7 +250,7 @@ TCGA_deseq2 <- function(importData) {
   saveRDS(normalized_vsd, paste0(RNAseqDirectory,importData,"/",importData,"_TCGAtools_DESeq2_vst_normalized_counts.rds"))
   
   
-  message(importData,": Extracting normalized log2Counts")
+  message(importData,": Extracting normalized log2Counts...")
   
   for (gene in genes_of_interest)
   {
