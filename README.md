@@ -1,20 +1,5 @@
 # TCGAquantify
-An R script that analyzes TCGA RNA-seq datasets and exports differentially expressed genes from specific cancer types. At the end, it plots separate graphs showing which cancer types overexpress each gene of interest the most compared to normal tissue.
-
-## Usage
-1) Change CancerProject variable to include or remove cancer types to be analyzed;
-2) Modify MainDirectory variable to change the folder in which all files will be saved;
-3) Change genes_of_interest variable to modify which genes will be analyzed.
-
-## Output
-This script will output the following files:
-1) .CSV table containing DESeq2 differential expresison results from each cancer type, will contain all genes and their log2 fold-change;
-2) .RDS file with log2-normalized counts (from DESeq2) for all genes;
-3) .RDS file with vst-transformed counts (from DESeq2) for all genes;
-4) .CSV table with log2-normalized counts (from DESeq2) for each gene of interest;
-5) .CSV table with differential expression analysis (from DESeq2) for each gene of interest (tumor vs. normal);
-6) .CSV table with patient info for all cancer and normal samples;
-7) .PDF figure with differential expression analysis (from DESeq2) for each gene of interest (tumor vs. normal).
+A package with functions to analyze TCGA RNA-seq datasets and export differentially expressed genes from specific cancer types. 
 
 ## Requirements
 This script requires the following packages:
@@ -23,10 +8,23 @@ This script requires the following packages:
 - SummarizedExperiment
 - DESeq2
 - RColorBrewer
-- rstatix
 - EDASeq
 
-Also requires a table with gene_name, gene_id, and gc_content that match the current annotation used by GDC. Both files are included in this repository, but if needed they can be downloaded from GENCODE (gene_name, gene_id) and biomart (gc_content).
+## Usage
+1) tcga_projects: variable to include or remove cancer types to be analyzed. Must be a list of these TCGA project IDs: "TCGA-BLCA", "TCGA-BRCA", "TCGA-CHOL", "TCGA-COAD", "TCGA-ESCA", "TCGA-GBM", "TCGA-HNSC", "TCGA-KICH", "TCGA-KIRC", "TCGA-KIRP", "TCGA-LIHC", "TCGA-LUAD", "TCGA-LUSC", "TCGA-PAAD", "TCGA-PCPG", "TCGA-PRAD", "TCGA-SARC", "TCGA-STAD", "TCGA-THCA", "TCGA-THYM", "TCGA-UCEC"
+
+2) genes_of_interest: variable to modify which genes will be analyzed. Must be a list of ENSEMBL gene names.
+
+3) output_directory: Folder where to save RNA-seq files downloaded from TCGA. The default is "./RNAseq_files/"
+
+4) gene_annotation: must be a table with ENSEMBL gene_id, gene_name, and gc_content in percentage (0-1). An example table for the hg38 genome is included in the ./data folder. A similar table can be easily generated using the biomart tool from ENSEMBL. 
+
+
+## Output
+These functions will return the following data:
+1) tcga_deseq2(): a dds object from DESeq2 with differential expression analysis between primary tumor and normal tissue for each TCGA project ID;
+2) tcga_dea(): a table with differential expression analysis (from DESeq2) for each gene of interest (tumor vs. normal) across all TCGA project IDs;
+3) tcga_norm_counts(): a table with log2-normalized counts (from DESeq2) for each gene of interest across all TCGA project IDs;
 
 ## Credits
 Written by Luis Abatti
