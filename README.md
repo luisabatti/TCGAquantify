@@ -3,6 +3,7 @@ A package with functions to analyze TCGA RNA-seq datasets and export differentia
 
 ## Requirements
 This script requires the following packages:
+
 - tidyverse
 - TCGAbiolinks
 - SummarizedExperiment
@@ -11,10 +12,13 @@ This script requires the following packages:
 - EDASeq
 
 ## Usage
+👉 You can find a step-by-step tutorial on how to use this script here: https://luisabatti.github.io/TCGAquantify/
+
 These functions will return the following data types:
+
 1) tcga_deseq2(): a dds object from DESeq2 with differential expression analysis between primary tumor and normal tissue for each TCGA project ID;
-2) tcga_dea(): a table with differential expression analysis (from DESeq2) for each gene of interest (tumor vs. normal) across all TCGA project IDs;
-3) tcga_norm_counts(): a table with log2-normalized counts (from DESeq2) for each gene of interest across all TCGA project IDs;
+2) tcga_dea(): a table with differential expression analysis (from DESeq2) for each gene of interest (tumor vs. normal) across TCGA project IDs;
+3) tcga_norm_counts(): a table with log2-normalized counts (from DESeq2) for each gene of interest across TCGA project IDs;
 
 ## Settings
 1) tcga_projects: variable to specify cancer types to be analyzed. Must be a list of these TCGA project IDs: 
